@@ -26,7 +26,8 @@ FROM Nashvilledata
 ORDER  BY ParcelID;
 
 --self join table to itself
-SELECT n1.ParcelID, n1.PropertyAddress, n2.ParcelID, n2.PropertyAddress, ISNULL(n1.PropertyAddress, n2.PropertyAddress)
+SELECT n1.ParcelID, n1.PropertyAddress, n2.ParcelID, n2.PropertyAddress, 
+	ISNULL(n1.PropertyAddress, n2.PropertyAddress)
 FROM Nashvilledata AS n1
 JOIN Nashvilledata AS n2
 	ON n1.ParcelID = n2.ParcelID
@@ -126,11 +127,13 @@ select * From Nashvilledata;
 --removing duplicates 
 -- using window functions, get rid of DUPLICATE values (although not a standard practice)
 --build a CTE called rownum 
-WITH rownumCTE AS(SELECT *, ROW_NUMBER() OVER (PARTITION BY ParcelID, 
-							PropertyAddress, 
-							SalePrice,
-						SaleDate, 
-						LegalReference ORDER BY ParcelID) AS row_num
+WITH rownumCTE 
+	AS(SELECT *, 
+	ROW_NUMBER() OVER (PARTITION BY ParcelID, 
+				PropertyAddress, 
+				SalePrice,
+				SaleDate, 
+				LegalReference ORDER BY ParcelID) AS row_num
 							
 FROM Nashvilledata)   --this query does not work 
 
